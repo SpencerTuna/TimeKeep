@@ -21,7 +21,8 @@ public class NavigationView extends AppCompatActivity {
         NavButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                Intent i = new Intent(NavigationView.this, MainActivity.class);
+                startActivity(i);
             }
         });
     }

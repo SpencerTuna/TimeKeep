@@ -60,7 +60,8 @@ public class TasksView extends AppCompatActivity {
         NavButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                Intent i = new Intent(TasksView.this, NavigationView.class);
+                startActivity(i);
             }
         });    }
 }
