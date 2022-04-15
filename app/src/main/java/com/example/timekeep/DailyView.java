@@ -17,11 +17,7 @@ import java.util.ArrayList;
 public class DailyView extends AppCompatActivity {
     private TextView DayView;
     private ListView HourView;
-//    private ListView EventView;
     private LocalDate selectedDate;
-//    private LocalTime selectedTime;
-    EventsClass events = new EventsClass();
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,14 +28,12 @@ public class DailyView extends AppCompatActivity {
         int d = getIntent().getIntExtra("Day", 1);
         initWidgets();
         selectedDate = selectedDate.of(y, m ,d);
-//        selectedTime = LocalTime.now();
         SetDayView();
     }
     private void initWidgets(){
 
         DayView = findViewById(R.id.MonthDay);
         HourView = findViewById(R.id.HourList);
-//        EventView = findViewById(R.id.EventList);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -47,14 +41,9 @@ public class DailyView extends AppCompatActivity {
 
         DayView.setText(monthDayFromDate(selectedDate));
         HourAdapter hourAdapter = new HourAdapter(getApplicationContext(), getHourList());
-//        EventAdapter eventAdapter = new EventAdapter(getApplicationContext(), getEventList());
         HourView.setAdapter(hourAdapter);
-//        EventView.setAdapter(eventAdapter);
     }
 
-  /*  private List<EventsClass> getEventList() {
-        return events.viewEventsForDayAndTime(selectedDate, selectedTime);
-    }*/
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private ArrayList<HourEvent> getHourList() {

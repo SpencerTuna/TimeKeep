@@ -100,8 +100,11 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onItemClick(int position, String dayText) {
+        LocalDate firstOfMonth = SelectedDate.withDayOfMonth(1);
+        int dayOfWeek = firstOfMonth.getDayOfWeek().getValue();
+
         Intent i = new Intent(MainActivity.this, DailyView.class);
-        SelectedDate = SelectedDate.of(SelectedDate.getYear(), SelectedDate.getMonthValue(), position-1);
+        SelectedDate = SelectedDate.of(SelectedDate.getYear(), SelectedDate.getMonthValue(), position-dayOfWeek+1);
         i.putExtra("Month", SelectedDate.getMonthValue());
         i.putExtra("Year", SelectedDate.getYear());
         i.putExtra("Day", SelectedDate.getDayOfMonth());
