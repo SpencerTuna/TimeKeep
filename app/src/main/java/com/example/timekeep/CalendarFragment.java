@@ -1,14 +1,19 @@
 package com.example.timekeep;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -17,25 +22,42 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements CalendarAdapter.OnItemListener {
+public class CalendarFragment extends Fragment implements CalendarAdapter.OnItemListener {
     private TextView MonthYearText;
     private RecyclerView CalendarRecyclerView;
     private LocalDate SelectedDate;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        initWidgets();
-        SelectedDate = LocalDate.now();
-        setMonthView();
-        NavButton();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_calendar, container, false);
     }
 
-    private void initWidgets() {
-        CalendarRecyclerView = findViewById(R.id.CalendarRecyclerView);
-        MonthYearText = findViewById(R.id.MonthNameYear);
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        SelectedDate = ((HomeActivity)getActivity()).getSelectedDate();
+        CalendarRecyclerView = getView().findViewById(R.id.CalendarRecyclerView);
+        MonthYearText = getView().findViewById(R.id.MonthNameYear);
+        setMonthView();
+
+        Button nextMonth = getView().findViewById(R.id.NextMonthButton);
+        Button prevMonth = getView().findViewById(R.id.PreviousMonthButton);
+
+        nextMonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SelectedDate = SelectedDate.plusMonths(1);
+                setMonthView();
+            }
+        });
+        prevMonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SelectedDate = SelectedDate.minusMonths(1);
+                setMonthView();
+            }
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -44,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         ArrayList<String> daysInMonth = DaysInMonth(SelectedDate);
 
         CalendarAdapter calendarAdapter = new CalendarAdapter(daysInMonth, this);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 7);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 7);
         CalendarRecyclerView.setLayoutManager(layoutManager);
         CalendarRecyclerView.setAdapter(calendarAdapter);
     }
@@ -77,37 +99,13 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void PreviousMonthAction(View view) {
-        SelectedDate = SelectedDate.minusMonths(1);
-        setMonthView();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void NextMonthAction(View view) {
-        SelectedDate = SelectedDate.plusMonths(1);
-        setMonthView();
-    }
-    public void NavButton(){
-        Button NavButton = findViewById(R.id.NavButton);
-        NavButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, NavigationView.class);
-                startActivity(i);
-            }
-        });    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onItemClick(int position, String dayText) {
         LocalDate firstOfMonth = SelectedDate.withDayOfMonth(1);
         int dayOfWeek = firstOfMonth.getDayOfWeek().getValue();
-
-        Intent i = new Intent(MainActivity.this, DailyView.class);
         SelectedDate = SelectedDate.of(SelectedDate.getYear(), SelectedDate.getMonthValue(), position-dayOfWeek+1);
-        i.putExtra("Month", SelectedDate.getMonthValue());
-        i.putExtra("Year", SelectedDate.getYear());
-        i.putExtra("Day", SelectedDate.getDayOfMonth());
-        startActivity(i);
+        ((HomeActivity)getActivity()).setSelectedDate(SelectedDate);
+
+        ((HomeActivity)getActivity()).SwitchFragment(new DailyView());
     }
 }

@@ -1,12 +1,23 @@
 package com.example.timekeep;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 public class HourEvent {
-    LocalTime time;
+    private LocalTime time;
+    private ArrayList<TaskEvent> listOfEvents;
 
-    public HourEvent(LocalTime time){
+    public ArrayList<TaskEvent> getListOfEvents() {
+        return listOfEvents;
+    }
+
+    public void setListOfEvents(ArrayList<TaskEvent> listOfEvents) {
+        this.listOfEvents = listOfEvents;
+    }
+
+    public HourEvent(LocalTime time, ArrayList<TaskEvent> list){
         this.time=time;
+        this.listOfEvents = list;
     }
     public LocalTime getTime() {
         return time;

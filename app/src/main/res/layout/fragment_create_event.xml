@@ -43,7 +43,6 @@
         tools:ignore="MissingConstraints" />
     <TextView
         android:id="@+id/EventDate"
-        android:onClick="DatePicker"
         android:layout_width="wrap_content"
         android:textSize="25dp"
         android:text="Date"
@@ -61,7 +60,6 @@
         tools:ignore="MissingConstraints" />
     <TextView
         android:id="@+id/EventTime"
-        android:onClick="TimePicker"
         android:layout_width="wrap_content"
         android:textSize="25dp"
         android:text="12:00"

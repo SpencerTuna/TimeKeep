@@ -11,6 +11,7 @@
         android:id="@+id/CrossOutEvent"
         android:checked="false"
         android:button="@null"
+        android:focusable="false"
         android:background="?android:attr/listChoiceIndicatorMultiple"/>
     <LinearLayout
         android:background="@color/teal_700"
@@ -23,7 +24,7 @@
             android:gravity="left"
             android:id="@+id/TaskEventName"
             android:textSize="25sp"
-            android:textColor="@color/purple_700"
+            android:textColor="@color/black"
             android:text="10:00" />
 
     </LinearLayout>
